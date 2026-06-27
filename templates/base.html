@@ -1,0 +1,29 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Daudu Mezenobe Andrew — Full-Stack Python Developer{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Full-stack Python developer building production-grade web apps with Django, Flask, PostgreSQL, and AI integrated where it actually helps.{% endblock %}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Loaded after Bootstrap on purpose: main.css overrides Bootstrap's
+       own CSS variables, which only works if it loads second. -->
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+</head>
+<body>
+  {% include "partials/navbar.html" %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "partials/footer.html" %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

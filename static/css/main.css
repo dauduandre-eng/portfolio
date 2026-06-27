@@ -1,0 +1,209 @@
+/* =========================================================================
+   Design tokens
+   These are the single source of truth for the visual identity. Change a
+   value here and it propagates everywhere — that's the whole point of
+   CSS custom properties over hardcoded hex codes scattered through markup.
+   ========================================================================= */
+:root {
+  /* Color: deliberately a cool off-white, not the warm-cream/serif look
+     that's become the generic "AI-designed site" default. */
+  --color-paper: #f6f7f9;
+  --color-paper-raised: #ffffff;
+  --color-ink: #14181f;
+  --color-mist: #5b6270;
+  --color-signal: #5b3df5; /* primary accent: links, buttons, focus */
+  --color-signal-rgb: 91, 61, 245;
+  --color-query: #0e9f6e; /* used ONLY for "available/live" status */
+  --color-rule: #e2e5ea;
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --space-section: clamp(3.5rem, 8vw, 6rem);
+}
+
+/* =========================================================================
+   Bootstrap variable overrides
+   Bootstrap 5.3 exposes most of its design tokens as CSS custom properties
+   (--bs-*). Redefining them here — after bootstrap.min.css loads — re-skins
+   every component (buttons, navbar, forms) without touching Bootstrap's
+   source or running a Sass build. This is what makes Bootstrap + a real
+   design identity possible without a build pipeline.
+   ========================================================================= */
+body {
+  --bs-body-bg: var(--color-paper);
+  --bs-body-color: var(--color-ink);
+  --bs-body-font-family: var(--font-body);
+  --bs-link-color: var(--color-signal);
+  --bs-link-hover-color: #4a30d6;
+  --bs-primary: var(--color-signal);
+  --bs-primary-rgb: var(--color-signal-rgb);
+  --bs-border-color: var(--color-rule);
+}
+
+/* =========================================================================
+   Base typography
+   ========================================================================= */
+h1, h2, h3, .display-headline {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.display-headline {
+  font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.lead {
+  color: var(--color-mist);
+  font-size: 1.15rem;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--color-signal);
+  margin-bottom: 0.75rem;
+}
+
+.text-mist {
+  color: var(--color-mist);
+}
+
+/* =========================================================================
+   Accessibility: visible focus state
+   Bootstrap's default focus ring is subtle; on a light background it needs
+   to be unmistakable for keyboard users.
+   ========================================================================= */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+/* =========================================================================
+   Layout sections
+   ========================================================================= */
+.site-header {
+  border-bottom: 1px solid var(--color-rule);
+  background: var(--color-paper);
+}
+
+.navbar-brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-ink) !important;
+}
+
+.hero,
+.what-i-do,
+.about-hero,
+.how-i-work,
+.stack {
+  padding-block: var(--space-section);
+}
+
+.what-i-do,
+.how-i-work {
+  border-top: 1px solid var(--color-rule);
+}
+
+.site-footer {
+  border-top: 1px solid var(--color-rule);
+  margin-top: var(--space-section);
+}
+
+/* =========================================================================
+   Signature element: the schema card
+   Styled like a real Postgres result set — structure that's actually true
+   of the content, not decoration. The only animated element on the page.
+   ========================================================================= */
+.schema-card {
+  background: var(--color-paper-raised);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(20, 24, 31, 0.04);
+}
+
+.schema-card__title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-mist);
+  margin-bottom: 1rem;
+}
+
+.schema-card__table {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.schema-card__table th,
+.schema-card__table td {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-rule);
+  text-align: left;
+  font-weight: 400;
+}
+
+.schema-card__table tr:last-child th,
+.schema-card__table tr:last-child td {
+  border-bottom: none;
+}
+
+.schema-card__table th {
+  color: var(--color-mist);
+  width: 35%;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-query);
+  margin-right: 0.4rem;
+  animation: pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-dot {
+    animation: none;
+  }
+}
+
+/* =========================================================================
+   Stack pills (About page)
+   ========================================================================= */
+.stack-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0;
+  margin: 0;
+}
+
+.stack-list li {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: var(--color-paper-raised);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.75rem;
+}

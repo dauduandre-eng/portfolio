@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-7">
+        <p class="eyebrow">Full-Stack Python Developer</p>
+        <h1 class="display-headline">I build production-grade software, backend to deploy.</h1>
+        <p class="lead">
+          Django, Flask, and PostgreSQL for the backend. AI integrated
+          where it earns its place, not bolted on as a buzzword.
+        </p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a class="btn btn-primary btn-lg" href="mailto:you@example.com">Get in touch</a>
+          <a class="btn btn-outline-secondary btn-lg" href="{% url 'core:about' %}">About me</a>
+          <!-- "View my work" CTA attaches here once the projects app
+               ships (Milestone 3) — no point linking somewhere empty. -->
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="schema-card" role="img" aria-label="Profile summary, styled as a database query result">
+          <p class="schema-card__title">developer_profile</p>
+          <table class="schema-card__table">
+            <tbody>
+              <tr><th scope="row">role</th><td>Full-Stack Python Developer</td></tr>
+              <tr><th scope="row">stack</th><td>Django, Flask, PostgreSQL</td></tr>
+              <tr><th scope="row">focus</th><td>AI integration, done deliberately</td></tr>
+              <tr><th scope="row">status</th><td><span class="status-dot" aria-hidden="true"></span>available</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="what-i-do">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-md-4">
+        <p class="eyebrow">// backend</p>
+        <h2 class="h4">APIs and data, done right</h2>
+        <p class="text-mist">Django and Flask services backed by properly modeled PostgreSQL — migrations, indexes, and constraints treated as design decisions, not afterthoughts.</p>
+      </div>
+      <div class="col-md-4">
+        <p class="eyebrow">// frontend</p>
+        <h2 class="h4">Interfaces people can actually use</h2>
+        <p class="text-mist">Responsive, accessible front ends built on Bootstrap — fast to ship, customized enough that nobody mistakes it for a template.</p>
+      </div>
+      <div class="col-md-4">
+        <p class="eyebrow">// ai</p>
+        <h2 class="h4">AI where it earns its place</h2>
+        <p class="text-mist">LLM features scoped tightly to a real problem and rate-limited by design — not a chatbot bolted on for the sake of a buzzword.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
