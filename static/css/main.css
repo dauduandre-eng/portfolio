@@ -108,12 +108,23 @@ button:focus-visible,
 .what-i-do,
 .about-hero,
 .how-i-work,
-.stack {
+.stack,
+.page-header {
   padding-block: var(--space-section);
 }
 
+.project-grid-section,
+.project-body {
+  padding-bottom: var(--space-section);
+}
+
+.project-image {
+  padding-bottom: 2rem;
+}
+
 .what-i-do,
-.how-i-work {
+.how-i-work,
+.project-grid-section {
   border-top: 1px solid var(--color-rule);
 }
 
@@ -206,4 +217,39 @@ button:focus-visible,
   border: 1px solid var(--color-rule);
   border-radius: var(--radius-sm);
   padding: 0.35rem 0.75rem;
+}
+
+/* =========================================================================
+   Project cards (list page) and case study layout (detail page)
+   ========================================================================= */
+.project-card {
+  background: var(--color-paper-raised);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  height: 100%;
+}
+
+.project-card h2 a {
+  text-decoration: none;
+  color: var(--color-ink);
+}
+
+.project-card h2 a:hover {
+  color: var(--color-signal);
+}
+
+.empty-state {
+  border: 1px dashed var(--color-rule);
+  border-radius: var(--radius-lg);
+  padding: 3rem;
+  text-align: center;
+}
+
+.project-image img {
+  border: 1px solid var(--color-rule);
+}
+
+.project-body {
+  max-width: 70ch;
 }

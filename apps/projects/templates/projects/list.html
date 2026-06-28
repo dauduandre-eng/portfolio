@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Projects — Daudu Mezenobe Andrew{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <p class="eyebrow">Projects</p>
+    <h1 class="display-headline">Things I've built.</h1>
+    <p class="lead">Backend-heavy by design — each one leans on the same kind of properly modeled data this site does.</p>
+  </div>
+</section>
+
+<section class="project-grid-section">
+  <div class="container">
+    {% if projects %}
+      <div class="row gy-4">
+        {% for project in projects %}
+          <div class="col-md-6">
+            <article class="project-card">
+              <h2 class="h4"><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h2>
+              <p class="text-mist">{{ project.summary }}</p>
+              {% if project.technologies.all %}
+                <ul class="stack-list mb-3">
+                  {% for tech in project.technologies.all %}
+                    <li>{{ tech.name }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+              <a class="btn btn-sm btn-outline-secondary" href="{{ project.get_absolute_url }}">Read case study</a>
+            </article>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <p class="eyebrow">// projects</p>
+        <p class="lead mb-0">Projects are on their way — check back soon.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

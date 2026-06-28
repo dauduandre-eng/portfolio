@@ -12,10 +12,8 @@
           where it earns its place, not bolted on as a buzzword.
         </p>
         <div class="d-flex gap-3 flex-wrap">
-          <a class="btn btn-primary btn-lg" href="mailto:you@example.com">Get in touch</a>
-          <a class="btn btn-outline-secondary btn-lg" href="{% url 'core:about' %}">About me</a>
-          <!-- "View my work" CTA attaches here once the projects app
-               ships (Milestone 3) — no point linking somewhere empty. -->
+          <a class="btn btn-primary btn-lg" href="{% url 'projects:list' %}">View my work</a>
+          <a class="btn btn-outline-secondary btn-lg" href="mailto:you@example.com">Get in touch</a>
         </div>
       </div>
       <div class="col-lg-5">
