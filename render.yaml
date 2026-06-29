@@ -52,6 +52,17 @@ services:
         sync: false
       - key: ANTHROPIC_API_KEY
         sync: false
+      # Used once by ensure_superuser (see build.sh) to create your admin
+      # login - free-tier services have no shell, so the usual
+      # `createsuperuser` interactive prompt isn't an option here. Safe
+      # to delete DJANGO_SUPERUSER_PASSWORD from the dashboard afterward;
+      # the command is a no-op forever once a superuser exists.
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
 
       # --- Non-secret config: safe to commit, easy to change later ---
       - key: EMAIL_PORT

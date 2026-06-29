@@ -9,3 +9,4 @@ python manage.py collectstatic --noinput
 # is the practical fallback: migrate is idempotent, so re-running it on
 # every build when nothing's pending just no-ops instantly.
 python manage.py migrate --noinput
+python manage.py ensure_superuser
