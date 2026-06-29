@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Daudu Mezenobe Andrew",
+  "jobTitle": "Full-Stack Python Developer",
+  "url": "{{ canonical_url }}"
+}
+</script>
+
 <section class="hero">
   <div class="container">
     <div class="row align-items-center gy-5">
@@ -13,7 +23,7 @@
         </p>
         <div class="d-flex gap-3 flex-wrap">
           <a class="btn btn-primary btn-lg" href="{% url 'projects:list' %}">View my work</a>
-          <a class="btn btn-outline-secondary btn-lg" href="mailto:you@example.com">Get in touch</a>
+          <a class="btn btn-outline-secondary btn-lg" href="{% url 'contact:contact' %}">Get in touch</a>
         </div>
       </div>
       <div class="col-lg-5">

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — Daudu Mezenobe Andrew{% endblock %}
+{% block meta_description %}{{ post.excerpt }}{% endblock %}
+{% block og_title %}{{ post.title }} — Daudu Mezenobe Andrew{% endblock %}
+{% block og_description %}{{ post.excerpt }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <p class="eyebrow">{{ post.published_at|date:"F j, Y" }}</p>
+    <h1 class="display-headline">{{ post.title }}</h1>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="container">
+    <div class="prose">
+      {{ post.body|linebreaks }}
+      <p class="mt-5">
+        <a href="{% url 'blog:list' %}">&larr; Back to all posts</a>
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

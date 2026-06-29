@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Blog — Daudu Mezenobe Andrew{% endblock %}
+{% block meta_description %}Backend engineering, Django, and AI integration, written without the hype.{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <p class="eyebrow">Blog</p>
+    <h1 class="display-headline">Notes on building this stuff.</h1>
+    <p class="lead">
+      Backend engineering, Django, and AI integration, without the hype.
+      <a href="{% url 'blog:feed' %}">RSS feed</a>.
+    </p>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="container">
+    {% if posts %}
+      <div class="prose">
+        {% for post in posts %}
+          <article class="mb-5">
+            <p class="eyebrow">{{ post.published_at|date:"F j, Y" }}</p>
+            <h2 class="h4"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+            <p class="text-mist">{{ post.excerpt }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <p class="eyebrow">// blog</p>
+        <p class="lead mb-0">Nothing published yet — first post is coming.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -21,6 +21,7 @@ In production, Render injects these as real environment variables — no
 from pathlib import Path
 
 import environ
+from django.contrib.messages import constants as message_constants
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -58,9 +59,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
     "apps.users",
     "apps.core",
     "apps.projects",
+    "apps.blog",
+    "apps.contact",
+    "apps.chat",
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -68,8 +73,17 @@ AUTH_USER_MODEL = "users.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    # WhiteNoise must sit directly after SecurityMiddleware so it can serve
-    # static files in production without a separate Nginx/CDN layer.
+    # Compresses HTML/JSON responses. Must sit near the top: middleware
+    # process_response runs bottom-to-top, so placing this high means it
+    # compresses the FINAL response after everything below it has already
+    # run, not a half-built one. Note: GZip + a response that both reflects
+    # attacker-controlled input AND carries a secret (the BREACH attack) is
+    # the standard caveat here - none of our pages do that (the contact
+    # form's CSRF token never appears alongside reflected user input), so
+    # this is safe for this site specifically, not safe to add blindly.
+    "django.middleware.gzip.GZipMiddleware",
+    # WhiteNoise serves static files directly, bypassing the rest of the
+    # stack for matched paths - it needs to be early, just not before GZip.
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -94,6 +108,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.chat.context_processors.chat_enabled",
+                "apps.core.context_processors.canonical_url",
             ],
         },
     },
@@ -108,6 +124,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": env.db("DATABASE_URL"),
 }
+# Without this, Django opens a fresh DB connection on every single request
+# and closes it at the end - real overhead under any real traffic. This
+# keeps connections open and reuses them for up to 60 seconds. Harmless in
+# local dev too, so there's no need to special-case it by DEBUG.
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -153,6 +174,46 @@ else:
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# --- Email (contact form) ---
+# Console backend in dev: emails print to the terminal running runserver
+# instead of actually sending, so testing the contact form never needs
+# real SMTP credentials. EMAIL_HOST etc. are provider-agnostic — point
+# them at Gmail's SMTP (free, works immediately) or any transactional
+# provider's SMTP relay (Resend, Postmark, etc.) later with zero code
+# changes, just different environment variables.
+EMAIL_BACKEND = (
+    "django.core.mail.backends.console.EmailBackend"
+    if DEBUG
+    else "django.core.mail.backends.smtp.EmailBackend"
+)
+EMAIL_HOST = env("EMAIL_HOST", default="")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="webmaster@localhost")
+# Where contact form submissions actually get sent. Defaults to
+# DEFAULT_FROM_EMAIL so the site works out of the box, but can be a
+# different address if you ever want submissions routed elsewhere.
+CONTACT_RECIPIENT_EMAIL = env("CONTACT_RECIPIENT_EMAIL", default=DEFAULT_FROM_EMAIL)
+
+# --- AI chat widget ---
+# CHAT_ENABLED is derived, not set directly: unset ANTHROPIC_API_KEY in
+# any environment and the widget disappears from every page with zero
+# code changes - exactly the "can be disabled without touching anything
+# else" isolation this app was designed around back in Milestone 0.
+ANTHROPIC_API_KEY = env("ANTHROPIC_API_KEY", default="")
+CHAT_MODEL = env("CHAT_MODEL", default="claude-haiku-4-5-20251001")
+CHAT_ENABLED = bool(ANTHROPIC_API_KEY)
+
+# Django's default tag for an ERROR-level message is "error", but
+# Bootstrap's alert class is "alert-danger" — without this mapping,
+# an error-level message would silently render as an unstyled,
+# un-colored alert. We don't use messages.error() yet, but this is the
+# kind of mismatch that's invisible until the day someone adds one.
+MESSAGE_TAGS = {
+    message_constants.ERROR: "danger",
+}
 
 # --- Production security hardening ---
 # These only activate when DEBUG=False, so local development is unaffected.

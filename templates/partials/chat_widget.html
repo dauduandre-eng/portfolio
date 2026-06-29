@@ -1,0 +1,30 @@
+{% load static %}<!-- Rendering csrf_token here (even though we read the
+     cookie, not this input, from JS) is what guarantees the CSRF cookie
+     actually exists. Django only sets it lazily, the first time
+     something calls for a token - without this, a visitor who lands on
+     the homepage and never visits /contact/ would have no cookie at all
+     by the time they try the chat, and every submission would 403. -->
+{% csrf_token %}
+<div id="chat-widget" class="chat-widget">
+  <button id="chat-toggle" class="chat-widget__toggle" type="button"
+          aria-expanded="false" aria-controls="chat-panel">
+    Ask about my work
+  </button>
+
+  <div id="chat-panel" class="chat-widget__panel" hidden>
+    <div class="chat-widget__header">
+      <p class="chat-widget__title">Ask about my work</p>
+      <button id="chat-close" class="chat-widget__close" type="button" aria-label="Close chat">&times;</button>
+    </div>
+
+    <div id="chat-messages" class="chat-widget__messages" aria-live="polite"></div>
+
+    <form id="chat-form" class="chat-widget__form">
+      <input type="text" id="chat-input" maxlength="500"
+             placeholder="Ask something specific..." autocomplete="off" required>
+      <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+  </div>
+</div>
+
+<script src="{% static 'js/chat-widget.js' %}" defer></script>

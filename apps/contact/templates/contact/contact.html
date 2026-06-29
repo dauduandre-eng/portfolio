@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Contact — Daudu Mezenobe Andrew{% endblock %}
+{% block meta_description %}Get in touch about recruiting, freelance Django/Flask work, or anything on this site.{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <p class="eyebrow">Contact</p>
+    <h1 class="display-headline">Let's talk.</h1>
+    <p class="lead">Recruiting, freelance work, or a question about something on this site — this goes straight to my inbox.</p>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="container">
+    <div class="prose">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <!-- Honeypot: visually hidden, but still in the DOM and tab order
+             for a screen reader to skip naturally via aria-hidden. Real
+             visitors never see or fill this; simple bots filling every
+             input blindly will. -->
+        <div aria-hidden="true" style="position: absolute; left: -9999px;">
+          {{ form.website }}
+        </div>
+
+        <div class="mb-3">
+          <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
+          {{ form.name }}
+          {% for error in form.name.errors %}
+            <div class="text-danger small mt-1">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+          {{ form.email }}
+          {% for error in form.email.errors %}
+            <div class="text-danger small mt-1">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label for="{{ form.message.id_for_label }}" class="form-label">Message</label>
+          {{ form.message }}
+          {% for error in form.message.errors %}
+            <div class="text-danger small mt-1">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary btn-lg">Send message</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -2,6 +2,9 @@
 
 {% block title %}{{ project.title }} — Daudu Mezenobe Andrew{% endblock %}
 {% block meta_description %}{{ project.summary }}{% endblock %}
+{% block og_title %}{{ project.title }} — Daudu Mezenobe Andrew{% endblock %}
+{% block og_description %}{{ project.summary }}{% endblock %}
+{% block og_image %}{% if project.image_url %}<meta property="og:image" content="{{ project.image_url }}">{% endif %}{% endblock %}
 
 {% block content %}
 <section class="page-header">
@@ -32,17 +35,19 @@
 {% if project.image_url %}
   <section class="project-image">
     <div class="container">
-      <img src="{{ project.image_url }}" alt="Screenshot of {{ project.title }}" class="img-fluid rounded">
+      <img src="{{ project.image_url }}" alt="Screenshot of {{ project.title }}" class="img-fluid rounded" loading="lazy" decoding="async">
     </div>
   </section>
 {% endif %}
 
-<section class="project-body">
+<section class="content-section">
   <div class="container">
-    {{ project.description|linebreaks }}
-    <p class="mt-5">
-      <a href="{% url 'projects:list' %}">&larr; Back to all projects</a>
-    </p>
+    <div class="prose">
+      {{ project.description|linebreaks }}
+      <p class="mt-5">
+        <a href="{% url 'projects:list' %}">&larr; Back to all projects</a>
+      </p>
+    </div>
   </div>
 </section>
 {% endblock %}

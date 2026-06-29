@@ -16,11 +16,14 @@
             <a class="nav-link" href="{% url 'projects:list' %}">Projects</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'blog:list' %}">Blog</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'core:about' %}">About</a>
           </li>
-          <!-- Blog (Milestone 4) nav item attaches here once that app exists. -->
+          <!-- Contact form (Milestone 5) earns its own nav item once it exists. -->
           <li class="nav-item ms-md-2">
-            <a class="btn btn-sm btn-primary" href="mailto:you@example.com">Get in touch</a>
+            <a class="btn btn-sm btn-primary" href="{% url 'contact:contact' %}">Get in touch</a>
           </li>
         </ul>
       </div>
