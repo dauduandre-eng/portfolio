@@ -1,0 +1,65 @@
+# Render Blueprint (Infrastructure-as-Code). Commit this file and use
+# Render's "New > Blueprint" flow rather than configuring services by hand
+# in the dashboard - this way the entire infra is reviewable in the repo,
+# the same as everything else in this project.
+#
+# Free tier is used deliberately for now: free web services spin down
+# after 15 minutes of inactivity (≈30-60s cold start on the next request),
+# and free Postgres databases are deleted 30 days after creation. Both are
+# real, accepted trade-offs for getting this live at zero cost first -
+# upgrading either to a paid plan later is a Render Dashboard change, not
+# a code change.
+
+databases:
+  - name: daudu-portfolio-db
+    databaseName: daudu_portfolio
+    plan: free
+
+services:
+  - type: web
+    name: daudu-portfolio
+    runtime: python
+    plan: free
+    buildCommand: "bash build.sh"
+    # Runs after the build, before traffic switches to the new version -
+    # the correct place for migrations, not bundled into buildCommand.
+    preDeployCommand: "python manage.py migrate --noinput"
+    # --bind is explicit on purpose rather than relying on gunicorn's
+    # default PORT-detection behavior - unambiguous, and easier to debug
+    # if something's wrong than trusting an implicit default.
+    startCommand: "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
+    healthCheckPath: /healthz/
+    autoDeployTrigger: commit
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: daudu-portfolio-db
+          property: connectionString
+
+      # --- Secrets: never hardcoded here. Render prompts for each of
+      # these once, during the initial Blueprint creation flow, and
+      # stores them encrypted. ---
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+      - key: CONTACT_RECIPIENT_EMAIL
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+
+      # --- Non-secret config: safe to commit, easy to change later ---
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: CHAT_MODEL
+        value: claude-haiku-4-5-20251001

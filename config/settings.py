@@ -18,6 +18,7 @@ In production, Render injects these as real environment variables — no
 .env file exists there, and none is needed.
 """
 
+import os
 from pathlib import Path
 
 import environ
@@ -47,6 +48,24 @@ DEBUG = env("DEBUG")
 # before it's reachable in production, rather than discovering a
 # misconfiguration from a security scanner.
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+
+# Render sets RENDER_EXTERNAL_HOSTNAME automatically to the service's real
+# onrender.com domain - appending it here means ALLOWED_HOSTS resolves
+# correctly without us needing to know that domain in advance, or editing
+# anything after the first deploy. A custom domain added later still needs
+# adding to ALLOWED_HOSTS manually via the env var above.
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Django 4+ checks incoming POST requests' Origin header against this list
+# (in addition to ALLOWED_HOSTS) before accepting a CSRF token as valid.
+# Behind Render's reverse proxy this is a real, easy-to-miss gotcha: without
+# it, the contact form and chat widget — both POST endpoints — would work
+# perfectly in dev and then mysteriously 403 in production.
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
 
 
 # Application definition
@@ -227,3 +246,9 @@ if not DEBUG:
     # Render terminates TLS at its edge and forwards plain HTTP internally,
     # using this header to tell Django the original request was HTTPS.
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    # Render's own internal health-check prober may hit this path directly
+    # rather than through the same edge that sets X-Forwarded-Proto for
+    # real visitor traffic - undocumented platform internals aren't worth
+    # betting the deploy's health status on. Exempting it guarantees a 200
+    # regardless, on a path no actual visitor ever sees anyway.
+    SECURE_REDIRECT_EXEMPT = [r"^healthz/$"]
