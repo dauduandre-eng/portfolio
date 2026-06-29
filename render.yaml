@@ -21,9 +21,6 @@ services:
     runtime: python
     plan: free
     buildCommand: "bash build.sh"
-    # Runs after the build, before traffic switches to the new version -
-    # the correct place for migrations, not bundled into buildCommand.
-    preDeployCommand: "python manage.py migrate --noinput"
     # --bind is explicit on purpose rather than relying on gunicorn's
     # default PORT-detection behavior - unambiguous, and easier to debug
     # if something's wrong than trusting an implicit default.
