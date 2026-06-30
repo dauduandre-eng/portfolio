@@ -40,11 +40,7 @@ services:
       # --- Secrets: never hardcoded here. Render prompts for each of
       # these once, during the initial Blueprint creation flow, and
       # stores them encrypted. ---
-      - key: EMAIL_HOST
-        sync: false
-      - key: EMAIL_HOST_USER
-        sync: false
-      - key: EMAIL_HOST_PASSWORD
+      - key: RESEND_API_KEY
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
@@ -65,9 +61,5 @@ services:
         sync: false
 
       # --- Non-secret config: safe to commit, easy to change later ---
-      - key: EMAIL_PORT
-        value: "587"
-      - key: EMAIL_USE_TLS
-        value: "True"
       - key: CHAT_MODEL
         value: claude-haiku-4-5-20251001

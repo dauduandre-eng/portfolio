@@ -195,23 +195,16 @@ else:
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- Email (contact form) ---
-# Console backend in dev: emails print to the terminal running runserver
-# instead of actually sending, so testing the contact form never needs
-# real SMTP credentials. EMAIL_HOST etc. are provider-agnostic — point
-# them at Gmail's SMTP (free, works immediately) or any transactional
-# provider's SMTP relay (Resend, Postmark, etc.) later with zero code
-# changes, just different environment variables.
-EMAIL_BACKEND = (
-    "django.core.mail.backends.console.EmailBackend"
-    if DEBUG
-    else "django.core.mail.backends.smtp.EmailBackend"
-)
-EMAIL_HOST = env("EMAIL_HOST", default="")
-EMAIL_PORT = env.int("EMAIL_PORT", default=587)
-EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
-EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="webmaster@localhost")
+# Sent via Resend's HTTP API (api.resend.com, port 443) rather than
+# Django's SMTP email backend. Render's free tier blocks outbound traffic
+# to SMTP ports (25, 465, 587) entirely at the network level — confirmed
+# directly against this deployment, not a theoretical concern — so SMTP
+# was never going to work here regardless of provider or credentials.
+# RESEND_API_KEY empty means the contact view logs the message instead of
+# calling the API - lets local dev work with zero real credentials,
+# mirroring the old console-backend behavior without needing SMTP at all.
+RESEND_API_KEY = env("RESEND_API_KEY", default="")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="onboarding@resend.dev")
 # Where contact form submissions actually get sent. Defaults to
 # DEFAULT_FROM_EMAIL so the site works out of the box, but can be a
 # different address if you ever want submissions routed elsewhere.
