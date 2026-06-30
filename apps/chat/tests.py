@@ -31,7 +31,7 @@ class BuildContextTests(TestCase):
 
     def test_published_project_is_included(self):
         Project.objects.create(
-            title="Visible Project", summary="A real summary.", description="d"
+            title="Visible Project", summary="A real summary."
         )
 
         context = build_context()
@@ -47,7 +47,6 @@ class BuildContextTests(TestCase):
         Project.objects.create(
             title="Secret Draft",
             summary="s",
-            description="d",
             is_published=False,
         )
 

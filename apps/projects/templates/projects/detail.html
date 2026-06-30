@@ -43,7 +43,31 @@
 <section class="content-section">
   <div class="container">
     <div class="prose">
-      {{ project.description|linebreaks }}
+      {% if project.problem %}
+        <h2 class="h4 case-study-heading">The problem</h2>
+        {{ project.problem|linebreaks }}
+      {% endif %}
+
+      {% if project.solution %}
+        <h2 class="h4 case-study-heading">The solution</h2>
+        {{ project.solution|linebreaks }}
+      {% endif %}
+
+      {% if project.challenges %}
+        <h2 class="h4 case-study-heading">Challenges</h2>
+        {{ project.challenges|linebreaks }}
+      {% endif %}
+
+      {% if project.outcome %}
+        <h2 class="h4 case-study-heading">Outcome</h2>
+        {{ project.outcome|linebreaks }}
+      {% endif %}
+
+      {% if project.lessons_learned %}
+        <h2 class="h4 case-study-heading">Lessons learned</h2>
+        {{ project.lessons_learned|linebreaks }}
+      {% endif %}
+
       <p class="mt-5">
         <a href="{% url 'projects:list' %}">&larr; Back to all projects</a>
       </p>

@@ -425,3 +425,12 @@ button:focus-visible,
 .prose {
   max-width: 70ch;
 }
+
+.case-study-heading {
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.case-study-heading:first-child {
+  margin-top: 0;
+}

@@ -35,9 +35,30 @@ class Project(models.Model):
         max_length=240,
         help_text="One or two sentences. Shown on the project list page.",
     )
-    description = models.TextField(
-        help_text="The full case study. Shown on the project detail page."
+
+    # Structured case-study fields, replacing the original single
+    # freeform `description`. Each is independently optional: a small
+    # weekend project might only ever have "solution" filled in, and the
+    # template only renders a section heading when that field actually
+    # has content - never an empty "Lessons Learned" header floating over
+    # nothing. This is the literal mechanism that makes a project read as
+    # a deliberate case study instead of a screenshot with a caption.
+    problem = models.TextField(
+        blank=True, help_text="What problem was this solving, and for whom?"
     )
+    solution = models.TextField(
+        blank=True, help_text="What did you actually build, and how?"
+    )
+    challenges = models.TextField(
+        blank=True, help_text="What was genuinely hard about it, and why?"
+    )
+    outcome = models.TextField(
+        blank=True, help_text="What happened once it was built or shipped?"
+    )
+    lessons_learned = models.TextField(
+        blank=True, help_text="What would you do differently next time?"
+    )
+
     technologies = models.ManyToManyField(
         Technology, related_name="projects", blank=True
     )

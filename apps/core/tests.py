@@ -73,7 +73,7 @@ class ActiveNavTests(TestCase):
 
     def test_project_detail_page_marks_projects_link_active(self):
         project = Project.objects.create(
-            title="A Project", summary="s", description="d"
+            title="A Project", summary="s"
         )
 
         response = self.client.get(project.get_absolute_url())
@@ -135,10 +135,10 @@ class SitemapTests(TestCase):
         into the public list page or the chat assistant's context.
         """
         Project.objects.create(
-            title="Visible Project", summary="s", description="d", is_published=True
+            title="Visible Project", summary="s", is_published=True
         )
         Project.objects.create(
-            title="Secret Draft", summary="s", description="d", is_published=False
+            title="Secret Draft", summary="s", is_published=False
         )
 
         response = self.client.get(reverse("sitemap"))

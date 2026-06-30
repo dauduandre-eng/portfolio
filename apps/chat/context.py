@@ -8,15 +8,16 @@ CONTEXT_CACHE_TTL = 60 * 10  # 10 minutes: long enough to spare the DB from
 # a query on every single chat message, short enough that a newly
 # published project shows up in conversation reasonably soon after.
 
-# TODO: personalize this with real specifics (years of experience,
-# availability, what kind of work you're looking for) — same caveat as
-# the About page bio: nothing here is a claim about your actual history.
 ABOUT_BLURB = (
-    "Daudu Mezenobe Andrew is a full-stack Python developer working "
-    "primarily in Django and Flask, with PostgreSQL as the default "
-    "datastore. He cares about properly modeled data, tested code, and "
-    "AI features that are scoped to a real problem rather than bolted on "
-    "for the sake of a buzzword."
+    "Daudu Mezenobe Andrew is a full-stack developer based in Lagos, "
+    "Nigeria, working primarily in Django and Python with PostgreSQL. "
+    "Since 2024 he's built real production systems: a multi-vendor "
+    "WhatsApp commerce platform with live Paystack billing (ProductBot), "
+    "a fintech investment simulator on its own custom domain "
+    "(ZovoAssets), and a captive-portal Wi-Fi access system for shared "
+    "workspaces (PepperHouse). In December 2025 he moved to focus on "
+    "software engineering full-time. He's currently exploring agentic AI "
+    "integration with Claude's API on one of his existing projects."
 )
 
 
