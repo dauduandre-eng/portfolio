@@ -129,6 +129,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "apps.chat.context_processors.chat_enabled",
                 "apps.core.context_processors.canonical_url",
+                "apps.core.context_processors.active_nav",
             ],
         },
     },

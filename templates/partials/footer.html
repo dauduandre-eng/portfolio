@@ -1,8 +1,39 @@
-<footer class="site-footer">
-  <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 py-4">
-    <p class="mb-0 text-mist">&copy; {% now "Y" %} Daudu Mezenobe Andrew</p>
-    <p class="mb-0 text-mist" style="font-family: var(--font-mono); font-size: 0.85rem;">
-      Built with Django &middot; deployed on Render
-    </p>
+{% load static %}<footer class="site-footer">
+  <div class="container py-5">
+    <div class="row gy-4">
+      <div class="col-md-5">
+        <p class="footer-philosophy">Every Personal Build Is an Asset.</p>
+        <p class="text-mist mb-0" style="font-family: var(--font-mono); font-size: 0.85rem;">
+          Build. Learn. Share. Grow.
+        </p>
+      </div>
+
+      <div class="col-md-3">
+        <p class="footer-heading">Site</p>
+        <ul class="footer-link-list">
+          <li><a href="{% url 'core:home' %}">Home</a></li>
+          <li><a href="{% url 'projects:list' %}">Projects</a></li>
+          <li><a href="{% url 'blog:list' %}">Blog</a></li>
+          <li><a href="{% url 'core:about' %}">About</a></li>
+          <li><a href="{% url 'contact:contact' %}">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4">
+        <p class="footer-heading">Elsewhere</p>
+        <ul class="footer-link-list">
+          <li><a href="https://github.com/dauduandre-eng" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/andrewdaudu" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="{% static 'resume.pdf' %}" target="_blank" rel="noopener">Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+      <p class="mb-0 text-mist">&copy; {% now "Y" %} Daudu Mezenobe Andrew</p>
+      <p class="mb-0 text-mist" style="font-family: var(--font-mono); font-size: 0.85rem;">
+        Built with Django &middot; deployed on Render
+      </p>
+    </div>
   </div>
 </footer>

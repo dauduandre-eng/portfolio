@@ -98,10 +98,27 @@ button:focus-visible,
   background: var(--color-paper);
 }
 
+/* z-index sits below the chat widget's 1050 (see .chat-widget) so the
+   widget always floats above the nav, never the reverse. */
+.site-header--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
 .navbar-brand {
   font-family: var(--font-display);
   font-weight: 600;
   color: var(--color-ink) !important;
+}
+
+/* Bootstrap's .nav-link.active exists but has no opinion on color in our
+   theme - this gives it one, using the same signal-violet accent as
+   links and buttons elsewhere, so "you are here" reads as obviously
+   intentional rather than a missed style. */
+.navbar-nav .nav-link.active {
+  color: var(--color-signal) !important;
+  font-weight: 600;
 }
 
 .hero,
@@ -130,6 +147,56 @@ button:focus-visible,
 .site-footer {
   border-top: 1px solid var(--color-rule);
   margin-top: var(--space-section);
+}
+
+.footer-philosophy {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.footer-heading {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--color-mist);
+  margin-bottom: 0.9rem;
+}
+
+.footer-link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-link-list a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.footer-link-list a:hover {
+  color: var(--color-signal);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--color-rule);
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+}
+
+/* The philosophy line that closes out the About page (see .prose) - a
+   bit larger and centered, distinct from ordinary body paragraphs so it
+   reads as a deliberate sign-off, not just the last sentence. */
+.philosophy-signoff {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 2rem;
 }
 
 /* =========================================================================

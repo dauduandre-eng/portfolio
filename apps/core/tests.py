@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
@@ -33,6 +34,88 @@ class AboutViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "core/about.html")
+
+    def test_bio_mentions_real_background_not_placeholder_copy(self):
+        """
+        Regression test specifically against the old placeholder bio
+        coming back - if someone reverts this template accidentally, this
+        should fail loudly rather than silently shipping generic copy.
+        """
+        response = self.client.get(reverse("core:about"))
+
+        self.assertContains(response, "Code::Blocks")
+        self.assertContains(response, "December 2025")
+        self.assertNotContains(response, "I work primarily in Django and Flask, with")
+
+
+class ActiveNavTests(TestCase):
+    """
+    Confirms the app-name-based matching actually does what it's meant
+    to: a Project's DETAIL page (not just the list page) should still
+    highlight "Projects" in the nav, since both share the projects app.
+    """
+
+    def test_home_page_marks_home_link_active(self):
+        response = self.client.get(reverse("core:home"))
+        content = response.content.decode()
+
+        self.assertIn('aria-current="page"', content)
+        self.assertIn('class="nav-link active"', content)
+
+    def test_about_page_does_not_mark_home_active(self):
+        response = self.client.get(reverse("core:about"))
+
+        home_link_start = response.content.decode().find('href="/">Home')
+        active_marker = response.content.decode()[
+            max(0, home_link_start - 80) : home_link_start
+        ]
+        self.assertNotIn("active", active_marker)
+
+    def test_project_detail_page_marks_projects_link_active(self):
+        project = Project.objects.create(
+            title="A Project", summary="s", description="d"
+        )
+
+        response = self.client.get(project.get_absolute_url())
+
+        projects_link_index = response.content.decode().find("Projects</a>")
+        preceding = response.content.decode()[
+            max(0, projects_link_index - 150) : projects_link_index
+        ]
+        self.assertIn("active", preceding)
+
+
+class FooterTests(TestCase):
+    def test_footer_links_to_real_github_and_linkedin(self):
+        response = self.client.get(reverse("core:home"))
+
+        self.assertContains(response, "https://github.com/dauduandre-eng")
+        self.assertContains(response, "https://linkedin.com/in/andrewdaudu")
+
+    def test_footer_includes_resume_download(self):
+        response = self.client.get(reverse("core:home"))
+
+        self.assertContains(response, "resume.pdf")
+
+    def test_resume_pdf_exists_in_the_static_source_directory(self):
+        """
+        Confirms the actual file collectstatic would pick up genuinely
+        exists on disk - not just that the template links to a path.
+        Doesn't request it through the test client: Django's test client
+        doesn't serve files under STATICFILES_DIRS the way `runserver`
+        does in real dev (verified directly against a live runserver
+        instance), so routing through self.client here would test a
+        Django test-client quirk, not the thing that actually matters.
+        """
+        resume_path = settings.BASE_DIR / "static" / "resume.pdf"
+
+        self.assertTrue(resume_path.exists())
+
+    def test_footer_includes_philosophy_signoff(self):
+        response = self.client.get(reverse("core:home"))
+
+        self.assertContains(response, "Every Personal Build Is an Asset.")
+        self.assertContains(response, "Build. Learn. Share. Grow.")
 
 
 class RobotsTxtTests(TestCase):

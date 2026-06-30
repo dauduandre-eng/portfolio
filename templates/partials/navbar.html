@@ -1,4 +1,4 @@
-<header class="site-header">
+<header class="site-header site-header--sticky">
   <nav class="navbar navbar-expand-md py-3">
     <div class="container">
       <a class="navbar-brand" href="{% url 'core:home' %}">Daudu Andrew</a>
@@ -10,18 +10,25 @@
       <div class="collapse navbar-collapse" id="navMain">
         <ul class="navbar-nav ms-auto align-items-md-center gap-md-1">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'core:home' %}">Home</a>
+            <a class="nav-link {% if active_nav == 'home' %}active{% endif %}"
+               {% if active_nav == 'home' %}aria-current="page"{% endif %}
+               href="{% url 'core:home' %}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'projects:list' %}">Projects</a>
+            <a class="nav-link {% if active_nav == 'projects' %}active{% endif %}"
+               {% if active_nav == 'projects' %}aria-current="page"{% endif %}
+               href="{% url 'projects:list' %}">Projects</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'blog:list' %}">Blog</a>
+            <a class="nav-link {% if active_nav == 'blog' %}active{% endif %}"
+               {% if active_nav == 'blog' %}aria-current="page"{% endif %}
+               href="{% url 'blog:list' %}">Blog</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'core:about' %}">About</a>
+            <a class="nav-link {% if active_nav == 'about' %}active{% endif %}"
+               {% if active_nav == 'about' %}aria-current="page"{% endif %}
+               href="{% url 'core:about' %}">About</a>
           </li>
-          <!-- Contact form (Milestone 5) earns its own nav item once it exists. -->
           <li class="nav-item ms-md-2">
             <a class="btn btn-sm btn-primary" href="{% url 'contact:contact' %}">Get in touch</a>
           </li>
